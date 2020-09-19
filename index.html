@@ -1,60 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>Night Sky</title>
-	<script type="text/javascript" src="d3.min.js"></script>
-	<script type="text/javascript" src="d3.layout.min.js"></script>
-	<script type="text/javascript" src="d3.geom.min.js"></script>
-	<script type="text/javascript" src="underscore-min.js"></script>
-	<script src="jquery-1.7.2.min.js" charset="utf-8">
 
-	</script>
-	<style type="text/css" media="screen">
-	body{
-		background-color:white;
-		filter: blur(4px);
-		-webkit-filter: blur(4px);
-		/* cursor: none; */
-	}
-	.menu{
-		position:absolute;
-		top :20px;
-		right:20px;
-	}
-	</style>
+	<meta charset="utf-8">
+	<title>The Totem Room for Energy and Wellness</title>
+	<script type="text/javascript" src="js/d3.min.js"></script>
+	<script type="text/javascript" src="js/d3.layout.min.js"></script>
+	<script type="text/javascript" src="js/d3.geom.min.js"></script>
+	<script type="text/javascript" src="js/underscore-min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+
+	<style type="text/css" media="screen"></style>
 </head>
+
 <body>
 	<script type="text/javascript" charset="utf-8">
 
-	function getRandomColor()  {
-		// var letters = '0123456789ABCDEF';
-		// var color = '#';
-		// for (var i = 0; i < 6; i++) {
-		// 	color += letters[Math.floor(Math.random() * 16)];
-		// }
-		// return color;
-
-		let moonrise = [
-			'#347a9e',
-			'#49547f',
-			'#2b346a',
-			'#4ffab4','#4ffab4',
-			'#e5dfd2',
-			'#fd3835','#fd3835', '#fd3835']
-		let color = moonrise
-		// var silvertones = ['#3c3434', '#5c6464', '#aea99e']
-		// var color = silvertones
-		return color[Math.floor(Math.random() * 10)];
-	}
-
-	var moonrise = [
-		'#36769a',
-		'#3c467c',
-		'#ff484a', '#ff484a', '#ff484a', '#ff484a', '#ff484a',
-		'#4af1a6','#4af1a6', '#4af1a6',
-		'#986246',
-		'#353433','#353433', '#353433', '#353433','#353433','#353433','#353433']
+	// variables
 	var w = window.innerWidth, h = window.innerHeight;
 
 	var vis = d3.select("body").append("svg:svg").attr("width", w).attr("height", h);
@@ -64,10 +26,9 @@
 	var links = [];
 
 	var USE_GRID = true;
-
-	var GRID_SIZE = 20;
-
-	var GRID_TYPE = "HEXA";
+	var GRID_SIZE = 175;
+	var GRID_TYPE = "SHIFT_ODD_ROWS";
+	var NUMBER_OF_NODES = 3;
 
 	// set up event handlers
 	$(document).ready(function(){
@@ -79,12 +40,8 @@
 			}
 		);
 
-
-		//$("#CELL_SIZE").rangeinput();
 		$("#CELL_SIZE").bind("change",
 		function(){
-
-			console.log($(this).attr("value"));
 			GRID_SIZE = $(this).attr("value");
 			grid.init();
 			force.start();
@@ -100,25 +57,29 @@
 	);
 });
 
-for(var i = 0; i < 18; i++) {
+var totem_idx_list = [...Array(8).keys()]
+for (var i = 0; i < NUMBER_OF_NODES; i++) {
+	var random_idx = totem_idx_list[Math.floor(Math.random()*totem_idx_list.length)];
+	totem_idx_list = totem_idx_list.filter(function(value, index, arr){ return value != random_idx;})
 	var node = {
-		label : "node " + i
+		label : "node " + i,
+		totem: "totem_" + (random_idx + 1)
 	};
 	nodes.push(node);
 };
 
 for(var i = 0; i < nodes.length; i++) {
 	for(var j = 0; j < i; j++) {
-		if(Math.random() > .99-Math.sqrt(i)*.02)
+		if(Math.random() > .99-Math.sqrt(i)*.001)
 		links.push({
 			source : i,
 			target : j,
-			weight :1
+			weight : 1
 		});
 	}
 };
 
-var force = d3.layout.force().size([w, h]).nodes(nodes).links(links).gravity(1).linkDistance(function(d){return (1-d.weight)*100}).charge(-3000).linkStrength(function(x) {
+var force = d3.layout.force().size([w, h]).nodes(nodes).links(links).gravity(1).linkDistance(function(d){return (1-d.weight)*100}).charge(-9000).linkStrength(function(x) {
 	return x.weight * 5
 });
 
@@ -127,12 +88,16 @@ force.start();
 
 var color = d3.scale.category20();
 
-var link = vis.selectAll("line.link").data(links).enter().append("svg:line").attr("class", "link").style("stroke-width", 1.5).style("stroke", function(d){return getRandomColor()} ).style("opacity", function(d){return d.weight*0});
+var link = vis.selectAll("line.link").data(links).enter().append("svg:line").attr("class", "link").style("stroke-width", 1.5).style("opacity", function(d){return d.weight*0});
 
-var node = vis.selectAll("g.node").data(force.nodes()).enter().append("svg:g").attr("class", "node");
+var node = vis.selectAll("g.node").data(force.nodes()).enter().append("svg:g").attr("class", "node").style('cursor', 'pointer');
 node
-.append("svg:circle").attr("r", 20)
-// .style("fill", function(d, i){return moonrise[i]} ).style("stroke", function(d, i){return moonrise[i]} ).style("stroke-width", "1px");
+.append("svg:image")
+.attr("xlink:href",  function(d, i) { return `./totems/${d.totem}.png`;})
+.attr("x", function(d) { return -150;})
+.attr("y", function(d) { return -150;})
+.attr("height", 300)
+.attr("width", 300);
 node.call(force.drag);
 
 var updateLink = function() {
@@ -240,7 +205,7 @@ force.on("tick", function() {
 		var gridCanvas = vis.append("svg:g").attr("class", "gridcanvas");
 
 		_.each(grid.cells, function(c) {
-			gridCanvas.append("svg:circle").attr("cx", c.x).attr("cy", c.y).attr("r", 2).style("fill", function(d){return getRandomColor()} ).style("opacity", 0);
+			gridCanvas.append("svg:circle").attr("cx", c.x).attr("cy", c.y).attr("r", 2).style("opacity", 0);
 		});
 
 	}
@@ -250,18 +215,5 @@ force.on("tick", function() {
 });
 
 </script>
-<!-- <div class="menu">
-<div>
-<input type="checkbox" id="USE_GRID" checked>use grid</input>
-</div>
-<div>
-<input type="range" min="30" step="10" max="150" id="CELL_SIZE" value="60"></input>
-</div>
-<div>
-<input type="radio" name="GRID_TYPE" value="PLAIN">plain</input>
-<input type="radio" name="GRID_TYPE" value="SHIFT_ODD_ROWS">Shift odd rows</input>
-<input type="radio" name="GRID_TYPE" value="HEXA" checked>Hexa</input>
-</div>
-</div> -->
 </body>
 </html>
