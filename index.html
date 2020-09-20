@@ -17,7 +17,7 @@
 	<script type="text/javascript" charset="utf-8">
 
 	// variables
-	var w = window.innerWidth, h = window.innerHeight;
+	var w = window.innerWidth, h = window.innerHeight + 100;
 
 	var vis = d3.select("body").append("svg:svg").attr("width", w).attr("height", h);
 	var background = vis.append("g");
@@ -26,9 +26,9 @@
 	var links = [];
 
 	var USE_GRID = true;
-	var GRID_SIZE = 175;
+	var GRID_SIZE = 185;
 	var GRID_TYPE = "SHIFT_ODD_ROWS";
-	var NUMBER_OF_NODES = 3;
+	var NUMBER_OF_NODES = 2;
 
 	// set up event handlers
 	$(document).ready(function(){
@@ -92,12 +92,16 @@ var link = vis.selectAll("line.link").data(links).enter().append("svg:line").att
 
 var node = vis.selectAll("g.node").data(force.nodes()).enter().append("svg:g").attr("class", "node").style('cursor', 'pointer');
 node
+// .append("svg:a")
+  // .attr("xlink:href", function(d){return "https://stackoverflow.com/questions/13104681/hyperlinks-in-d3-js-objects";})
+	// .attr("target", "_blank")
 .append("svg:image")
 .attr("xlink:href",  function(d, i) { return `./totems/${d.totem}.png`;})
 .attr("x", function(d) { return -150;})
 .attr("y", function(d) { return -150;})
-.attr("height", 300)
-.attr("width", 300);
+.attr("height", 450)
+.attr("width", 450);
+
 node.call(force.drag);
 
 var updateLink = function() {
