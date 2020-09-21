@@ -10,6 +10,8 @@
 	<script type="text/javascript" src="js/underscore-min.js"></script>
 	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
 	<style type="text/css" media="screen"></style>
 </head>
 
@@ -96,6 +98,7 @@ node
 .append("svg:a")
   .attr("xlink:href", function(d){return d.url;})
 	.attr("target", "_blank")
+	.attr("class", "clearfix")
 .append("svg:image")
 .attr("xlink:href",  function(d, i) { return `./totems/${d.totem}.png`;})
 .attr("x", function(d) { return -300;})
