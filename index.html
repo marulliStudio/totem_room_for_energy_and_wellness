@@ -20,7 +20,7 @@
 	<script type="text/javascript" charset="utf-8">
 
 	// variables
-	var w = window.innerWidth, h = window.innerHeight + 500;
+	var w = window.innerWidth + 450, h = window.innerHeight + 450;
 
 	var vis = d3.select("body").append("svg:svg").attr("width", w).attr("height", h);
 	var background = vis.append("g");
@@ -102,8 +102,8 @@ node
 		.attr("class", "clearfix")
 .append("svg:image")
 	.attr("xlink:href",  function(d, i) { return `./totems/${d.totem}.png`;})
-	.attr("x", function(d) { return -250;})
-	.attr("y", function(d) { return -75;})
+	.attr("x", function(d) { return -225;})
+	.attr("y", function(d) { return -225;})
 	.attr("height", 450)
 	.attr("width", 450)
 
