@@ -20,7 +20,7 @@
 	<script type="text/javascript" charset="utf-8">
 
 	// variables
-	var w = window.innerWidth, h = window.innerHeight + 150;
+	var w = window.innerWidth, h = window.innerHeight + 500;
 
 	var vis = d3.select("body").append("svg:svg").attr("width", w).attr("height", h);
 	var background = vis.append("g");
@@ -31,7 +31,7 @@
 	var USE_GRID = true;
 	var GRID_SIZE = 300;
 	var GRID_TYPE = "SHIFT_ODD_ROWS";
-	var NUMBER_OF_NODES = 3;
+	var NUMBER_OF_NODES = 4;
 
 	// set up event handlers
 	$(document).ready(function(){
@@ -102,8 +102,8 @@ node
 		.attr("class", "clearfix")
 .append("svg:image")
 	.attr("xlink:href",  function(d, i) { return `./totems/${d.totem}.png`;})
-	.attr("x", function(d) { return -300;})
-	.attr("y", function(d) { return -275;})
+	.attr("x", function(d) { return -250;})
+	.attr("y", function(d) { return -75;})
 	.attr("height", 450)
 	.attr("width", 450)
 
