@@ -3,6 +3,7 @@
 <head>
 
 	<meta charset="utf-8">
+	<meta http-equiv="refresh" content="15"/>
 	<title>The Totem Room for Energy and Wellness</title>
 	<script type="text/javascript" src="js/d3.min.js"></script>
 	<script type="text/javascript" src="js/d3.layout.min.js"></script>
@@ -30,7 +31,7 @@
 	var USE_GRID = true;
 	var GRID_SIZE = 300;
 	var GRID_TYPE = "SHIFT_ODD_ROWS";
-	var NUMBER_OF_NODES = 2;
+	var NUMBER_OF_NODES = 3;
 
 	// set up event handlers
 	$(document).ready(function(){
@@ -96,15 +97,15 @@ var link = vis.selectAll("line.link").data(links).enter().append("svg:line").att
 var node = vis.selectAll("g.node").data(force.nodes()).enter().append("svg:g").attr("class", "node").style('cursor', 'pointer');
 node
 .append("svg:a")
-  .attr("xlink:href", function(d){return d.url;})
-	.attr("target", "_blank")
-	.attr("class", "clearfix")
+	  .attr("xlink:href", function(d){return d.url;})
+		.attr("target", "_blank")
+		.attr("class", "clearfix")
 .append("svg:image")
-.attr("xlink:href",  function(d, i) { return `./totems/${d.totem}.png`;})
-.attr("x", function(d) { return -300;})
-.attr("y", function(d) { return -300;})
-.attr("height", 450)
-.attr("width", 450);
+	.attr("xlink:href",  function(d, i) { return `./totems/${d.totem}.png`;})
+	.attr("x", function(d) { return -300;})
+	.attr("y", function(d) { return -275;})
+	.attr("height", 450)
+	.attr("width", 450)
 
 node.call(force.drag);
 
